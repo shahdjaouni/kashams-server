@@ -45,7 +45,10 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage, limits: { fileSize: 1000000 } }).single(
   "NewsImage"
 );
-
+// Get
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/TemplatesHTML/welcome.html");
+});
 // newsImage
 
 app.post("/news/image", function(req, res) {
@@ -263,6 +266,11 @@ function slicePosts(array, end, amount, flag) {
   var start = end - amount;
   return array.slice(start, end);
 }
+
+//The 404 Route (ALWAYS KEEP this as the last route)
+app.get("*", function(req, res) {
+  res.sendFile(__dirname + "/TemplatesHTML/pagenotfound.html");
+});
 
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, function() {
