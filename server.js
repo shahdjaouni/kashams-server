@@ -19,9 +19,6 @@ app.use(
   })
 );
 
-//Database Connection
-var port = 3005;
-
 mongoose.connect(
   "mongodb://admin:admin@ds163699.mlab.com:63699/kshamsdb",
   () => {
@@ -266,6 +263,8 @@ function slicePosts(array, end, amount, flag) {
   var start = end - amount;
   return array.slice(start, end);
 }
-app.listen(port, function() {
-  console.log("app listening on port " + port);
+
+const PORT = process.env.PORT || 3005;
+app.listen(PORT, function() {
+  console.log("app listening on port " + PORT);
 });
