@@ -68,8 +68,7 @@ app.post("/user/signup", (req, res) => {
     email: req.body.email,
     password: req.body.password,
     currentAmiraId: req.body.currentAmiraId,
-    isAmira: req.body.isAmira,
-    isAdmin: req.body.isAdmin
+    userType: req.body.userType
   };
   User.findOne({ username: newUser.username }, (err, user) => {
     if (!user) {
@@ -164,7 +163,7 @@ app.post("/shamosa/like", checkSession, (req, res) => {
 
 app.get("/get/available/amiras", checkSession, (req, res) => {
   var finalUsers = [];
-  User.find({ isAmira: true }, (err, users) => {
+  User.find({ userType: "amira" }, (err, users) => {
     for (var i = 0; i < users.length; i++) {
       if (users[i].people.length < 6) finalUsers.push(users[i]);
     }
