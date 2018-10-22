@@ -65,8 +65,11 @@ app.post("/user/signup", (req, res) => {
   var newUser = {
     gender: req.body.gender,
     username: req.body.username,
-    email: req.body.email,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    major: req.body.major,
     password: req.body.password,
+    phonenumber: req.body.phonenumber,
     currentAmiraId: req.body.currentAmiraId,
     userType: req.body.userType
   };
@@ -83,7 +86,24 @@ app.post("/user/signup", (req, res) => {
     }
   });
 });
-
+//Update info user
+app.post("/info/update", checkSession, (req, res) => {
+  User.findOne({ _id: req.body._id }, (err, users) => {
+    var updateInfo = {
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      major: req.body.major,
+      phonenumber: req.body.phonenumber,
+      password: req.body.password
+    };
+    users.update(updateInfo, function(err, doc) {
+      if (err) return err;
+      else {
+        res.send(doc);
+      }
+    });
+  });
+});
 //Login
 app.post("/user/login", (req, res) => {
   console.log("loging in...", req.body);
@@ -248,6 +268,25 @@ app.post("/add/student/halqa", checkSession, (req, res) => {
       res.send("Done");
     }
   );
+});
+//SignUp
+app.post("/halqa/student/exist", (req, res) => {
+  var newUser = { students: req.body.studentId };
+  Halaqa.findOne({ students: newUser.students }, (err, user) => {
+    if (!user) {
+      Halaqa.update(
+        { _id: req.body._id },
+        { $push: { students: req.body.studentId } },
+        (err, user) => {
+          if (err) return err;
+          console.log("student is added into halaqa");
+          res.send("Done");
+        }
+      );
+    } else {
+      res.send({ message: "Student is already exist." });
+    }
+  });
 });
 // get shamosa
 app.post("/get/shamosa/posts", checkSession, (req, res) => {
